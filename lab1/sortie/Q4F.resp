@@ -1,0 +1,8 @@
+rm -f *.o
+rm -f lab1
+rm -f *~
+g++ -g -O0 -Wall	-c -o lab1.o lab1.cpp
+g++ -g -O0 -Wall	-c -o point.o point.cpp
+g++ -g -O0 -Wall -o lab1 lab1.cpp
+g++ -g -O0 -Wall -o lab1 lab1.cpp
+g++ -g -O0 -Wall -o lab1 lab1.cpp
