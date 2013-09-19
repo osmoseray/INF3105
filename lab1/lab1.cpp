@@ -6,6 +6,7 @@
 
 #include <iostream>
 #include "point.h"
+#include<limits.h>
 
 /*
    Allez-y étape par étape. C'est la seule façon de ne pas introduire de bogue!
@@ -34,7 +35,7 @@ int main2(int argc, const char** args)
 int mainn8(int argc, const char** args)
 {
   Point point(1.2,5.7);
-  std::cout << "point.x=" << point.x << "\tpoint.y=" << point.y << std::endl;
+// std::cout << "point.x=" << point.x << "point.y=" << point.y << std::endl;
   return 0;
 }
 
@@ -58,6 +59,11 @@ int main4(int argc, const char** args)
   return 0;
 }
 
+
+double obtenirDistanceLaPlusCourte(Point points[]){
+ double distanceCourte=INT_MAX;
+ return distanceCourte;
+}
 int main(int argc, const char** args)
 {
   int nb;
