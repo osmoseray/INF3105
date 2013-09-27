@@ -7,9 +7,10 @@
 #include <iostream>
 #include "point.h"
 #include<limits.h>
+#include<cmath>
 
 /*
-   Allez-y étape par étape. C'est la seule façon de ne pas introduire de bogue!
+   Allez-y étaillepe par étape. C'est la seule façon de ne pas introduire de bogue!
 
   �etape 1 : Compiler ce sans modification.
    tape 2 : Enlever la fonction main() et renommer main2() ==> main()
@@ -60,14 +61,30 @@ int main4(int argc, const char** args)
 }
 
 
-double obtenirDistanceLaPlusCourte(Point points[]){
+double obtenirDistanceLaPlusCourte(int taille,Point points[]){
  double distanceCourte=INT_MAX;
+ for(int i=0;i<taille;i++){
+    for(int j=0;j<taille;j++){
+        if(i!=j){
+            double dist=points[i].distance(points[j]);
+            if(std::abs(dist)<distanceCourte){
+                distanceCourte=dist;
+              std::cout<<points[i]<< "et"<<points[j]<<std::endl;
+            }
+        }
+    }
+ }
+
  return distanceCourte;
 }
 int main(int argc, const char** args)
 {
-  int nb;
-  std::cin >> nb;
+    Point tab[3];
+    tab[0]= Point(100,3);
+    tab[1]= Point(20,5);
+    tab[2]= Point(11,4);
+    std::cout<<obtenirDistanceLaPlusCourte(3,tab);
+
 
 
   return 0;
