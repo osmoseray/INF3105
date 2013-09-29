@@ -65,7 +65,9 @@ class Tableau
 template <class T>
 Tableau<T>::Tableau(int capacite_initiale)
 {
-    //TODO
+    assert(capacite_initiale>-1);
+	nbElements=0;
+	capacite=capacite_initiale;
     elements = new T[capacite_initiale]; 
 }
 
@@ -79,7 +81,9 @@ Tableau<T>::Tableau(const Tableau& autre)
 template <class T>
 Tableau<T>::~Tableau()
 {
-    delete
+	assert(elements!=NULL);
+    delete[] elements;
+	elements=NULL:
 }
 
 template <class T>
@@ -93,7 +97,9 @@ int Tableau<T>::taille() const
 template <class T>
 void Tableau<T>::ajouter(const T& item)
 {
-    //TODO
+  assert(nbElements<=capacite);
+  if(nbElements==capacite) redimentionner(capacite*2);
+  elements[nbElements++]=item;
 }
 
 template <class T>
