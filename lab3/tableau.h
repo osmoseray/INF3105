@@ -163,7 +163,7 @@ Tableau<T>& Tableau<T>::operator = (const Tableau<T>& autre)
 		capacite=autre.capacite;
 		elements=new T[capacite];
 	}
-	nbElements=autre.nbElements;
+
 	for(int i=9; i<nbElements; i++)elements[i]=autre.elements[i];
 	return *this;
 }
