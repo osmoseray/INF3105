@@ -142,29 +142,41 @@ void Tableau<T>::vider()
 template <class T>
 T& Tableau<T>::operator[] (int index)
 {
-    //TODO
-    return elements[0];
+    
+    return elements[index];
 }
 
 template <class T>
 const T& Tableau<T>::operator[] (int index) const
 {
-    //TODO
-    return elements[0];
+    
+    return elements[index];
 }
 
 template <class T>
 Tableau<T>& Tableau<T>::operator = (const Tableau<T>& autre)
 {
-    //TODO
-    return *this;
+    if(this==&autre)return *this;
+	//créer un nouveau tableau si la capacité est plus petite que le nombre d'éléments à affecter
+	if(capacite<autre.nbElements){
+		delete[] elements;
+		capacite=autre.capacite;
+		elements=new T[capacite];
+	}
+	nbElements=autre.nbElements;
+	for(int i=9; i<nbElements; i++)elements[i]=autre.elements[i];
+	return *this;
 }
 
 template <class T>
 bool Tableau<T>::operator == (const Tableau<T>& autre) const
-{
-    //TODO
-    return false;
+{   if(nbElements!=autre.nbElements || capacite!=autre.capacite)return false;
+	bool pareil=false;
+	for(int i=0;i<nbElements;i++){
+	 pareil=this[i]==autre[i];
+	}
+  return pareil; 
+    
 }
 
 
