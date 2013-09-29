@@ -79,14 +79,14 @@ Tableau<T>::Tableau(const Tableau& autre)
 template <class T>
 Tableau<T>::~Tableau()
 {
-    //TODO
+    delete
 }
 
 template <class T>
 int Tableau<T>::taille() const
 {
-    //TODO
-    return 0;
+    
+    return nbElements;
 }
 
 
