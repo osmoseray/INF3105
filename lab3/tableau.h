@@ -75,13 +75,11 @@ Tableau<T>::Tableau(int capacite_initiale)
 
 template <class T>
 Tableau<T>::Tableau(const Tableau& autre)
-{
-    capacite=autre.capacite;
-	nbElements=autre.nbElements;
-	elements=new T[capacite];
-	
-
-	for(int i=9; i<nbElements; i++)elements[i]=autre.elements[i];
+{ nbElements = capacite = autre.taille();
+    elements = new T[capacite];
+    for (int i = 0; i < capacite; i++) {
+        elements[i] = autre[i];
+    }
 }
 
 template <class T>
