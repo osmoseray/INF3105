@@ -29,7 +29,7 @@ class Tableau
     void           inserer(const T& element, int index=0);
     // Enlève l'element à position index. Les éléments après index sont décalés d'une position après.
     void           enlever(int index=0);
-    void redimentionner(int nouvCapacite);
+    void redimensionner(int nouvCapacite);
 	// Cherche et retourne la position de l'élément. Si non trouvé, retourne -1.
     // Voir la méthode "trouver" dans les notes de cours. Il suffit de l'adapter pour retourner la position au lieu d'un booléen
     int            trouver(const T& element);
@@ -104,12 +104,12 @@ template <class T>
 void Tableau<T>::ajouter(const T& item)
 {
   assert(nbElements<=capacite);
-  if(nbElements==capacite) redimentionner(capacite*2);
+  if(nbElements==capacite) redimensionner(capacite*2);
   elements[nbElements++]=item;
 }
 
 template <class T>
-void Tableau<T>::redimentionner(int nouvCapacite){
+void Tableau<T>::redimensionner(int nouvCapacite){
  capacite=nouvCapacite;
   T* temp=new T[capacite];
   for(int i=0;i<nbElements;i++){
