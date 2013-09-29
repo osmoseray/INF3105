@@ -66,7 +66,7 @@ template <class T>
 Tableau<T>::Tableau(int capacite_initiale)
 {
     //TODO
-    elements = new T[1000]; // cette ligne n'est peut-être pas bonne.
+    elements = new T[capacite_initiale]; 
 }
 
 
