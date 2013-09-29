@@ -84,7 +84,7 @@ Tableau<T>::~Tableau()
 {
 	assert(elements!=NULL);
     delete[] elements;
-	elements=NULL:
+	elements=NULL;
 }
 
 template <class T>
