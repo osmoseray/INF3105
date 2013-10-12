@@ -1,17 +1,21 @@
 /*
-  INF3105 -- Structures de données et algorithmes
-  UQAM / Département d'informatique
-  Automne 2013 / TP1
+  à compléter ...
+
 */
 
-#if !defined(_POINT_H_)
-#define _POINT_H_
+// Ces deux lignes (directives au préprocesseur) permettent d'éviter d'inclure 2 fois ce .h à la compilation.
+#if !defined(__POINT_H__)
+#define __POINT_H__
+
+// attention : toujours fermer le #if par un #endif à la toute fin!
 
 #include <iostream>
 
+
 class Point {
   public:
-    Point(double x_=0, double y_=0);
+    Point(){}
+    Point(double x, double y);
     Point(const Point&);
 
     double distance(const Point&) const;
@@ -20,9 +24,9 @@ class Point {
     double x;
     double y;
 
-    friend std::istream& operator >> (std::istream&, Point&);
-    friend std::ostream& operator << (std::ostream&, const Point&);
+  friend std::ostream& operator << (std::ostream&, const Point&);
+  friend std::istream& operator >> (std::istream&, Point&);
 };
 
-#endif
+#endif // fin du #if plus haut
 

@@ -1,27 +1,31 @@
 /*
-  INF3105 -- Structures de données et algorithmes
-  UQAM / Département d'informatique
-  Automne 2013 / TP1
+ *Date: 13-09-10
+
 */
+
 
 #include <assert.h>
 #include <math.h>
 #include "point.h"
 
-Point::Point(double x_, double y_) 
-  : x(x_), y(y_)
+Point::Point(const Point& point)
+  : x(point.x), y(point.y)
 {
 }
 
-Point::Point(const Point& point)
-  : x(point.x), y(point.y) 
+Point::Point(double _x, double _y)
+  : x(_x), y(_y)
 {
 }
+
 
 double Point::distance(const Point& point) const {
-  // À compléter.
-  return 0;
+   double carreX=pow((point.x-x),2);
+   double carreY=pow((point.y-y),2);
+   double dist=sqrt(carreX+carreY);
+   return dist;
 }
+
 
 std::ostream& operator << (std::ostream& os, const Point& point) {
   os << "(" << point.x << "," << point.y << ")";
@@ -39,4 +43,5 @@ std::istream& operator >> (std::istream& is, Point& point) {
   }
   return is;
 }
+
 
