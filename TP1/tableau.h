@@ -1,3 +1,10 @@
+/*
+  INF3105 - Structures de données et algorithmes
+  UQAM / Département d'informatique
+  
+  Squelette pour classe générique Tableau<T> pour le Lab3 et TP1.
+*/
+
 // Ces deux lignes permettent d'éviter d'inclure 2 fois ce .h à la compilation.
 #if !defined(__TABLEAU_H__)
  #define __TABLEAU_H__
@@ -22,15 +29,17 @@ class Tableau
     void           inserer(const T& element, int index=0);
     // Enlève l'element à position index. Les éléments après index sont décalés d'une position après.
     void           enlever(int index=0);
-    // Cherche et retourne la position de l'élément. Si non trouvé, retourne -1.
+    void redimensionner(int nouvCapacite);
+	// Cherche et retourne la position de l'élément. Si non trouvé, retourne -1.
+    // Voir la méthode "trouver" dans les notes de cours. Il suffit de l'adapter pour retourner la position au lieu d'un booléen
     int            trouver(const T& element);
 
-    T&	           operator[] (int index);
+    T&             operator[] (int index);
     const T&       operator[] (int index) const;
 
 
     Tableau<T>&    operator = (const Tableau<T>& autre);
-    
+
     bool           operator == (const Tableau<T>& autre) const;
 
   private:
@@ -57,90 +66,146 @@ class Tableau
 template <class T>
 Tableau<T>::Tableau(int capacite_initiale)
 {
-    //TODO
-    elements = new T[1000]; // cette ligne n'est peut-être pas bonne.
+    assert(capacite_initiale>-1);
+	nbElements=0;
+	capacite=capacite_initiale;
+    elements = new T[capacite_initiale]; 
 }
 
 
 template <class T>
 Tableau<T>::Tableau(const Tableau& autre)
-{
-    //TODO
+{ nbElements = capacite = autre.taille();
+    elements = new T[capacite];
+    for (int i = 0; i < capacite; i++) {
+        elements[i] = autre[i];
+    }
 }
 
 template <class T>
 Tableau<T>::~Tableau()
 {
-    //TODO
+	assert(elements!=NULL);
+    delete[] elements;
+	elements=NULL;
 }
 
 template <class T>
 int Tableau<T>::taille() const
 {
-    //TODO
-    return 0;
+    
+    return nbElements;
 }
- 
+
 
 template <class T>
 void Tableau<T>::ajouter(const T& item)
 {
-    //TODO
+  assert(nbElements<=capacite);
+  if(nbElements==capacite) redimensionner(capacite*2);
+  elements[nbElements++]=item;
 }
 
 template <class T>
+void Tableau<T>::redimensionner(int nouvCapacite){
+ capacite=nouvCapacite;
+  T* temp=new T[capacite];
+  for(int i=0;i<nbElements;i++){
+    temp[i]=elements[i]; 
+  }
+  delete[] elements;
+  elements=temp;
+}
+template <class T>
 void Tableau<T>::inserer(const T& element, int index)
 {
-    //TODO
+    assert(index >= 0 && index < nbElements);
+    if(nbElements >= capacite) {
+        redimensionner(capacite*2);
+    }
+    for(int i = nbElements; i > index; i--) {
+        elements[i] = elements[i-1];
+    }
+    nbElements++;
+    elements[index] = element;
 }
 
 template <class T>
 void Tableau<T>::enlever(int index)
 {
-    //TODO
+      assert(index >= 0 && index < nbElements);
+    for(int i = index; i < nbElements-1; i++) {
+        elements[i] = elements[i+1];
+    }
+    nbElements--;
 }
 
 template <class T>
 int Tableau<T>::trouver(const T& element)
 {
-    //TODO
+     for(int i = 0; i < nbElements; i++) {
+        if(elements[i] == element) {
+            return i;
+        }
+    }
     return -1;
 }
 
 template <class T>
 void Tableau<T>::vider()
 {
-    //TODO
+   nbElements=0;
 }
 
 
 template <class T>
 T& Tableau<T>::operator[] (int index)
 {
-    //TODO
-    return elements[0];
+      assert(index >= 0 && index < nbElements);
+    
+    return elements[index];
 }
 
 template <class T>
 const T& Tableau<T>::operator[] (int index) const
 {
-    //TODO
-    return elements[0];
+    assert(index >= 0 && index < nbElements);
+    return elements[index];
 }
 
 template <class T>
 Tableau<T>& Tableau<T>::operator = (const Tableau<T>& autre)
 {
-    //TODO
+     if(this==&autre)
+        return *this;
+    nbElements = autre.nbElements;
+    if(capacite < autre.nbElements) {
+        delete[] elements;
+        capacite = autre.nbElements;
+        elements = new T[capacite];
+    }
+    for(int i = 0; i < nbElements; i++) {
+        elements[i] = autre.elements[i];
+    }
     return *this;
 }
 
 template <class T>
 bool Tableau<T>::operator == (const Tableau<T>& autre) const
-{
-    //TODO
-    return false;
+{      if(this == &autre) {
+        return true;
+    }
+    if(nbElements != autre.nbElements)
+        return false;
+    for(int i = 0; i < nbElements; i++) {
+        if(elements[i] != autre.elements[i]) {
+            return false;
+        }
+    }
+    return true; 
+    
 }
+
 
 #endif
 
