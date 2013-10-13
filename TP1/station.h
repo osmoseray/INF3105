@@ -9,16 +9,25 @@
 
 #include <iostream>
 #include <string>
-
+#include "immeuble.h"
 using namespace std;
 
 class Station {
   public:
-    // À compléter.
+  /**
+   Pour être installable sur un immeuble, celui-ci 
+   doit être de la hauteur minimale de la station 
+   */
+    bool peutEtreInstalleeSur(const Immeuble& im) const;
+	/** utile pour évaluer l'interférence*/
+	bool estCompriseEntre(const Immeuble& im1,const Immeuble& im2) const;
+	bool operator <(Immeuble& im)const;
 
   private:
-    // À compléter.
     string nom;
+	double hauteur;
+	double rayon;
+	
 
 
   friend std::istream& operator >> (std::istream&, Station&);
