@@ -14,20 +14,20 @@ using namespace std;
 
 class Station {
   public:
-  /**
-   Pour être installable sur un immeuble, celui-ci 
-   doit être de la hauteur minimale de la station 
+    Station(const string nom="",const double ht=0.0,const double r=0.0);
+    /* Pour être installable sur un immeuble, celui-ci
+   doit être de la hauteur minimale de la station
    */
     bool peutEtreInstalleeSur(const Immeuble& im) const;
-	/** utile pour évaluer l'interférence*/
-	bool estCompriseEntre(const Immeuble& im1,const Immeuble& im2) const;
-	bool operator <(Immeuble& im)const;
+    /** utile pour évaluer l'interférence*/
+    bool estCompriseEntre(const Immeuble& im1,const Immeuble& im2) const;
+    bool operator <(const Station& s)const;
 
   private:
     string nom;
-	double hauteur;
-	double rayon;
-	
+    double hauteur;
+    double rayon;
+
 
 
   friend std::istream& operator >> (std::istream&, Station&);

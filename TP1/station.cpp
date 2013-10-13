@@ -6,31 +6,31 @@
 
 #include "station.h"
 
-Station::Station(const string nom, const double ht, const double r) :
-    nom(nom), hauteur(ht), rayon(r)
+Station::Station(const string n, const double ht, const double r) :
+    nom(n), hauteur(ht), rayon(r)
 {
 }
-bool Station::peutEtreInstalleeSur(const Immeuble& im){
-	return im.hauteur>=hauteur;
+bool Station::peutEtreInstalleeSur(const Immeuble& im)const{
+    return im.hauteur>=hauteur;
 }
 
-bool Station::estCompriseEntre(const Immeuble& im1,const Immeuble& im2){
-	return im1.distance(im2)<=rayon;
+bool Station::estCompriseEntre(const Immeuble& im1,const Immeuble& im2)const{
+    return im1.distanceEntre(im2)<=rayon;
 }
-bool Station::operator < (const Station& s){
-	hauteur < s.hauteur;
+bool Station::operator < (const Station& s)const{
+    return hauteur < s.hauteur;
 }
 istream& operator >> (istream& is, Station& s){
     is >> s.nom;
     is >> s.hauteur;
-	is >> s.rayon;
-    
+    is >> s.rayon;
+
     return is;
 }
-ostream& operator << (ostream& os, Station& s){
+ostream& operator << (ostream& os,const  Station& s){
     os << s.nom;
-    
-    
+
+
     return os;
 }
 
