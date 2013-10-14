@@ -1,65 +1,220 @@
+/* tp1.cpp
+ * Par Laurent Morissette
+ * MORL05058301
+ * Dernière modification: 13 octobre 2013
+ *
+ * Ce programme lit un fichier contenant une liste de stations
+ * et d'immeubles. Il calcule ensuite la position optimale des
+ * stations sur les immeubles afin de couvrir le maximum de clients.
+ *
+ */
+
 #include <iostream>
 #include <fstream>
 #include "immeuble.h"
 #include "station.h"
 #include "tableau.h"
+#include <limits>
+#include <stdlib.h>
 
 using namespace std;
 
-int main(int argc, const char** argv)
-{
+
+struct Solution {
+    Tableau<Immeuble> lesPlusHautImmeubles,       //Immeubles assez haut pour au moins une station
+                      lesImmeubles;    //Tous les immeubles
+    Tableau<Station>  lesStations;     //Toutes les stations
+    int nbMaxClientPourSolution,                      //Nombre max de clients pour une solution
+        nbMaxClientPourImmeubles,              
+        tailleMin,                  
+        tailleMax;                  
+    Tableau<int> tabPositionsOptimale,         
+                 tabPositionsSolutionsCourante;           
+    bool pasAssezImm;
+};
+
+
+void produireCombinaisons(struct Solution &sol, int offset, int fin);
+
+void produirePermutations(struct Solution &sol, int debut, int fin);
+
+
+void verifierNombreDeClientsCouvertsParStation(struct Solution &sol);
+
+ 
+void permuterDeuxElementsPourSolution(struct Solution &sol, int a, int b);
+
+
+void afficherResultat(struct Solution &sol);
+
+
+bool immeubleCouvertParUneStationDansSolution(struct Solution& sol, int i, int j);
+
+int main(int argc, const char** argv) {
+
     // Pointeur vers l'entrée désirée (cin ou ifstream)
-    std::istream* entree;
+    istream* entree;
     // Pointeur vers un flux de lecture.
-    std::ifstream* entree_fichier = NULL;
+    ifstream* entree_fichier = NULL;
 
     // Sélection du flux de lecture
     if(argc>1){
-         entree = entree_fichier = new std::ifstream(argv[1]);
+         entree = entree_fichier = new ifstream(argv[1]);
          if(entree->fail())
-             std::cerr << "Erreur d'ouverture du fichier '" << argv[1] << "'" << std::endl;
+             cerr << "Erreur d'ouverture du fichier '" << argv[1] << "'" << endl;
     }else
-         entree = &std::cin;
+         entree = &cin;
 
-    Tableau<Station> stations;
-    Tableau<Immeuble> immeubles;
-    
+    Station stationLaMoinsHaute("a",numeric_limits<double>::max());                   
+                                          
+    Immeuble immLePlusHaut;                   
+    struct Solution sol;
+    sol.nbMaxClientPourSolution = -1;
+    sol.nbMaxClientPourImmeubles = 0;
     // Lecture. Les opérateurs >> pour Immeuble et Station sont à compléter.
+   
     int nbstations;
     (*entree) >> nbstations;
     for(int i=0;i<nbstations;i++){
         Station s;
         (*entree) >> s;
-        stations.ajouter(s);
-    }
+        sol.lesStations.ajouter(s);
+        if(sol.lesStations[i] < stationLaMoinsHaute) {
+            stationLaMoinsHaute = sol.lesStations[i];
+        }
+    }  
     
     while(*entree)
     {
         Immeuble immeuble;
         *entree >> immeuble;
         if(!(*entree)) break;
-        immeubles.ajouter(immeuble);
+        sol.lesImmeubles.ajouter(immeuble);
+        sol.nbMaxClientPourImmeubles = immeuble.ajouterClient(sol.nbMaxClientPourImmeubles);
+        if(stationLaMoinsHaute.peutEtreInstalleeSur(immeuble)) {
+            sol.lesPlusHautImmeubles.ajouter(immeuble);
+            if(immLePlusHaut < immeuble) {
+                immLePlusHaut = immeuble;
+            }
+        } 
     }
+
     delete entree_fichier; // delete est sécuritaire même si entree_fichier==NULL
     
     // Lecture terminée.
 
-
-    // Pour commencer, supportez une seule station.
-    // Ensuite, améliorez votre programme pour 2.
-    // Ensuite, généralisez à 3+.
-    if(stations.taille() != 1){
-        cerr << "Cette version ne supporte que les problèmes avec exactement une seule station!" << endl;
-        return 1;
+    
+    int i = 0, nbStationAConsiderer = sol.lesStations.taille();
+    while(i < nbStationAConsiderer) {
+        if(!sol.lesStations[i].peutEtreInstalleeSur(immLePlusHaut)) {
+            cerr << "Grave: " << sol.lesStations[i];
+            cerr << " trop haute pour tous les immeubles" << endl;
+            cerr << "La station est enlevée du tableau." << endl;
+            sol.lesStations.enlever(i);
+            nbStationAConsiderer--;
+        } else {
+            i++;
+        }
     }
-    Station& lastation = stations[0];
-    
-    
-    // Mettez l'algorithme ici.
-   
-   
-    // Affichez le résultat;
 
+    assert(sol.lesStations.taille() >= 1 && "Aucune station");
+    assert(sol.lesPlusHautImmeubles.taille() > 0);
 
+   
+    if(sol.lesPlusHautImmeubles.taille() < sol.lesStations.taille()) {
+        cerr << "Avertissement: plus de stations que ";
+        cerr << "d'immeubles pouvant les accueillir." << endl;
+        cerr << "Certaines stations ne seront pas utilisées dans ";
+        cerr << "la solution trouvée." << endl;
+        sol.pasAssezImm = true;
+        sol.tailleMin = sol.lesPlusHautImmeubles.taille();
+        sol.tailleMax = sol.lesStations.taille();
+    } else {
+        sol.pasAssezImm = false;
+        sol.tailleMin = sol.lesStations.taille();
+        sol.tailleMax = sol.lesPlusHautImmeubles.taille();
+    }
+
+    produireCombinaisons(sol, 0, sol.tailleMin);
+    afficherResultat(sol);
+    
     return 0;
 }
+
+void produireCombinaisons(struct Solution &sol, int debut, int fin) {
+
+    if(sol.nbMaxClientPourImmeubles == sol.nbMaxClientPourSolution) 
+        return;     //Tous les clients couverts
+    if (fin == 0) {
+        produirePermutations(sol, 0, sol.tailleMin);
+        return;
+    }
+    for (int i = debut; i <= sol.tailleMax - fin; ++i) {
+        sol.courant.ajouter(i);
+        produireCombinaisons(sol, i+1, fin -1);
+        sol.courant.enlever(sol.courant.taille()-1);
+    }
+}
+
+void permuterDeuxElementsPourSolution(struct Solution &sol, int a, int b) {
+    if(a!=b) {
+        int temp = sol.tabPositionsSolutionsCourante[a];
+        sol.tabPositionsSolutionsCourante[a] = sol.tabPositionsSolutionsCourante[b];
+        sol.tabPositionsSolutionsCourante[b] = temp;
+    }
+}
+
+void verifierNombreDeClientsCouvertsParStation(struct Solution &sol) {
+    
+    
+  
+    for(int i = 0; i < sol.tabPositionsSolutionsCourante.taille(); i++) {
+        if(!sol.lesStations[(sol.pasAssezImm?sol.tabPositionsSolutionsCourante[i]:i)].peutEtreInstalleeSur
+            (sol.lesPlusHautImmeubles[(sol.pasAssezImm?i:sol.tabPositionsSolutionsCourante[i])])) {
+            return;
+        }
+    }
+
+    int total = 0;
+    for(int i = 0; i < sol.lesImmeubles.taille(); i++) {
+        for(int j = 0; j < sol.tabPositionsSolutionsCourante.taille(); j++) {
+            if(immeubleCouvertParUneStationDansSolution(sol, i, j)) {
+                total = sol.lesImmeubles[i].ajouterClient(total);
+                break;
+            }
+        }
+    }
+
+    if(total > sol.nbMaxClientPourSolution) {
+        sol.nbMaxClientPourSolution = total;
+        sol.tabPositionsOptimale = sol.tabPositionsSolutionsCourante;
+    }
+}
+
+void produirePermutations(struct Solution &sol, int debut, int fin) {
+    
+    if(sol.nbMaxClientPourImmeubles == sol.nbMaxClientPourSolution)
+        return;     //On couvre tous les clients: deja optimale.
+    if(debut == fin) {
+        verifierNombreDeClientsCouvertsParStation(sol);
+    } else {
+        for(int i = debut; i < fin; i++) {
+            permuterDeuxElementsPourSolution(sol, debut, i);
+            produirePermutations(sol, debut + 1, fin);
+            permuterDeuxElementsPourSolution(sol, i, debut);
+        }
+    }
+}
+
+void afficherResultat(struct Solution& sol) {
+    for(int i = 0; i < sol.solution.taille(); i++) {
+        cout << sol.lesStations[(sol.pasAssezImm?sol.tabPositionsOptimale[i]:i)];
+        cout << " " << sol.lesPlusHautImmeubles[(sol.pasAssezImm?i:sol.tabPositionsOptimale[i])] << endl;
+    }
+    cout << sol.nbMaxClientPourSolution << endl;
+}
+
+bool immeubleCouvertParUneStationDansSolution(struct Solution& sol, int i, int j) {
+    return sol.lesStations[(sol.pasAssezImm?sol.tabPositionsSolutionsCourante[j]:j)].estCompriseEntre
+        (sol.lesImmeubles[i], sol.lesPlusHautImmeubles[(sol.pasAssezImm?j:sol.tabPositionsSolutionsCourante[j])]);
+} 
