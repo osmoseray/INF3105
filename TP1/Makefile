@@ -2,7 +2,7 @@
 # Adaptez ce fichier au besoin.
 
 # Options standard.
-OPTIONS = -Wall
+OPTIONS = -Wall -O3
 
 # L'option -g permet de générer les infos de débogage.
 # Décommentez la ligne suivante si vous désirez utiliser un débogueur.
