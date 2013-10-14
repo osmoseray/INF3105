@@ -1,31 +1,23 @@
-/*
-  à compléter ...
-
-*/
-
-// Ces deux lignes (directives au préprocesseur) permettent d'éviter d'inclure 2 fois ce .h à la compilation.
 #if !defined(__POINT_H__)
 #define __POINT_H__
 
-// attention : toujours fermer le #if par un #endif à la toute fin!
-
 #include <iostream>
-
+using namespace std;
 
 class Point {
-  public:
-    Point(){}
-    Point(double x, double y);
-    Point(const Point&);
+    public:
+        Point(double x=0, double y=0);
+        Point(const Point&);
+        
+        //Calcule et retourne la distance entre deux points.
+        double distance(const Point&) const;
 
-    double distance(const Point&) const;
+    private:
+        double x;
+        double y;
 
-  private:
-    double x;
-    double y;
-
-  friend std::ostream& operator << (std::ostream&, const Point&);
-  friend std::istream& operator >> (std::istream&, Point&);
+    friend ostream& operator << (ostream&, const Point&);
+    friend istream& operator >> (istream&, Point&);
 };
 
-#endif // fin du #if plus haut
+#endif
