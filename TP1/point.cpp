@@ -2,13 +2,13 @@
 #include <math.h>
 #include "point.h"
 
-Point::Point(double _x, double _y)
+Point::Point(double _x, double _y) 
   : x(_x), y(_y)
 {
 }
 
 Point::Point(const Point& point)
-  : x(point.x), y(point.y)
+  : x(point.x), y(point.y) 
 {
 }
 
@@ -32,3 +32,4 @@ istream& operator >> (istream& is, Point& point) {
     }
     return is;
 }
+
