@@ -7,6 +7,18 @@
  * et d'immeubles. Il calcule ensuite la position optimale des
  * stations sur les immeubles afin de couvrir le maximum de clients.
  *
+ * La technique bruteforce est utilisée afin d'essayer toute les solutions possibles pour la problématique
+ * avec des éléments de statistique combinatoires pour les générer.
+ *
+ * Les cas limites standards:
+ * 1) S'il n'y a pas assez d'immeubles pour traiter t'ensemble des stations, les sperflues snt ignorées
+ * 2) s'il n'y a pas  d'immeuble assez haut pour placer une station, elle est omise
+ * 3) s'il n'y a pas de station à traiter, le programme termine.
+ *
+ * Notez que l'approche bruteforce n'est pas la seule envisageable au départ:
+ * Je suis d'avis que l'approche par arbre minMax aurait pu être également considérée 
+ * afin de fournir la couverture maximale 
+ *
  */
 
 #include <iostream>
