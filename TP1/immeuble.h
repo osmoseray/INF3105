@@ -19,7 +19,7 @@ double h=0.0, int nc=0.0);
 /** calculer la dsistance entre l'immeuble courrant et un autre
 (utile pour évaluer l'interférence*/
 double distanceEntre(const Immeuble& im)const;
-int aujouterDesClients(int nombreAAjouter) const;
+int ajouterDesClients(int nombreAAjouter) const;
 
 /** Nécessaire pour comparer facilement la hauteur*/
 bool operator < (const Immeuble im) const;

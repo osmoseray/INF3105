@@ -15,7 +15,7 @@ Immeuble::Immeuble(string n, Point emp, double h, int clis)
 double Immeuble::distanceEntre(const Immeuble& im)const{
     return emplacement.distance(im.emplacement);}
 
- int Immeuble::aujouterDesClients(int nombreAAjouter) const{
+ int Immeuble::ajouterDesClients(int nombreAAjouter) const{
     return nbClientPresents+nombreAAjouter;
 }
 
