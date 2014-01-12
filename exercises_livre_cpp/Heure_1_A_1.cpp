@@ -1,6 +1,6 @@
 #include <iostream>
 #include "Heure_1_A_1.h"
-using namespace  std
+using namespace  std;
 void  sayHelloEsperanto(){
 	cout<<"saluton mondo!";
 }
