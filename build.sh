@@ -1,7 +1,7 @@
 #!/bin/sh
-echo "Build script pour les TP"
-cd TP2
-echo "build TP2"
+echo "Build script pour exercises du livre CPP"
+cd exercises_livre_cpp
+echo "Build exercises"
 make clean
 make
-./filtre
+
