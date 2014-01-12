@@ -7,6 +7,18 @@
  * et d'immeubles. Il calcule ensuite la position optimale des
  * stations sur les immeubles afin de couvrir le maximum de clients.
  *
+ * La technique bruteforce est utilisée afin d'essayer toute les solutions possibles pour la problématique
+ * avec des éléments de statistique combinatoires pour les générer.
+ *
+ * Les cas limites standards:
+ * 1) S'il n'y a pas assez d'immeubles pour traiter t'ensemble des stations, les sperflues snt ignorées
+ * 2) s'il n'y a pas  d'immeuble assez haut pour placer une station, elle est omise
+ * 3) s'il n'y a pas de station à traiter, le programme termine.
+ *
+ * Notez que l'approche bruteforce n'est pas la seule envisageable au départ:
+ * Je suis d'avis que l'approche par arbre minMax aurait pu être également considérée 
+ * afin de fournir la couverture maximale 
+ *
  */
 
 #include <iostream>
@@ -25,11 +37,11 @@ struct Solution {
                       lesImmeubles;    //Tous les immeubles
     Tableau<Station>  lesStations;     //Toutes les stations
     int nbMaxClientPourSolution,                      //Nombre max de clients pour une solution
-        nbMaxClientPourImmeubles,              
-        tailleMin,                  
-        tailleMax;                  
-    Tableau<int> tabPositionsOptimale,         
-                 tabPositionsSolutionsCourante;           
+        nbMaxClientPourImmeubles,
+        tailleMin,
+        tailleMax;
+    Tableau<int> positionsOptimale,
+                 positionsCourante;
     bool pasAssezImm;
 };
 
@@ -41,7 +53,7 @@ void produirePermutations(struct Solution &sol, int debut, int fin);
 
 void verifierNombreDeClientsCouvertsParStation(struct Solution &sol);
 
- 
+
 void permuterDeuxElementsPourSolution(struct Solution &sol, int a, int b);
 
 
@@ -65,14 +77,14 @@ int main(int argc, const char** argv) {
     }else
          entree = &cin;
 
-    Station stationLaMoinsHaute("a",numeric_limits<double>::max());                   
-                                          
-    Immeuble immLePlusHaut;                   
+    Station stationLaMoinsHaute("a",numeric_limits<double>::max());
+
+    Immeuble immLePlusHaut;
     struct Solution sol;
     sol.nbMaxClientPourSolution = -1;
     sol.nbMaxClientPourImmeubles = 0;
     // Lecture. Les opérateurs >> pour Immeuble et Station sont à compléter.
-   
+
     int nbstations;
     (*entree) >> nbstations;
     for(int i=0;i<nbstations;i++){
@@ -82,28 +94,28 @@ int main(int argc, const char** argv) {
         if(sol.lesStations[i] < stationLaMoinsHaute) {
             stationLaMoinsHaute = sol.lesStations[i];
         }
-    }  
-    
+    }
+
     while(*entree)
     {
         Immeuble immeuble;
         *entree >> immeuble;
         if(!(*entree)) break;
         sol.lesImmeubles.ajouter(immeuble);
-        sol.nbMaxClientPourImmeubles = immeuble.ajouterClient(sol.nbMaxClientPourImmeubles);
+        sol.nbMaxClientPourImmeubles = immeuble.ajouterDesClients(sol.nbMaxClientPourImmeubles);
         if(stationLaMoinsHaute.peutEtreInstalleeSur(immeuble)) {
             sol.lesPlusHautImmeubles.ajouter(immeuble);
             if(immLePlusHaut < immeuble) {
                 immLePlusHaut = immeuble;
             }
-        } 
+        }
     }
 
     delete entree_fichier; // delete est sécuritaire même si entree_fichier==NULL
-    
+
     // Lecture terminée.
 
-    
+
     int i = 0, nbStationAConsiderer = sol.lesStations.taille();
     while(i < nbStationAConsiderer) {
         if(!sol.lesStations[i].peutEtreInstalleeSur(immLePlusHaut)) {
@@ -120,7 +132,7 @@ int main(int argc, const char** argv) {
     assert(sol.lesStations.taille() >= 1 && "Aucune station");
     assert(sol.lesPlusHautImmeubles.taille() > 0);
 
-   
+
     if(sol.lesPlusHautImmeubles.taille() < sol.lesStations.taille()) {
         cerr << "Avertissement: plus de stations que ";
         cerr << "d'immeubles pouvant les accueillir." << endl;
@@ -137,49 +149,49 @@ int main(int argc, const char** argv) {
 
     produireCombinaisons(sol, 0, sol.tailleMin);
     afficherResultat(sol);
-    
+
     return 0;
 }
 
 void produireCombinaisons(struct Solution &sol, int debut, int fin) {
 
-    if(sol.nbMaxClientPourImmeubles == sol.nbMaxClientPourSolution) 
+    if(sol.nbMaxClientPourImmeubles == sol.nbMaxClientPourSolution)
         return;     //Tous les clients couverts
     if (fin == 0) {
         produirePermutations(sol, 0, sol.tailleMin);
         return;
     }
     for (int i = debut; i <= sol.tailleMax - fin; ++i) {
-        sol.courant.ajouter(i);
+        sol.positionsCourante.ajouter(i);
         produireCombinaisons(sol, i+1, fin -1);
-        sol.courant.enlever(sol.courant.taille()-1);
+        sol.positionsCourante.enlever(sol.positionsCourante.taille()-1);
     }
 }
 
 void permuterDeuxElementsPourSolution(struct Solution &sol, int a, int b) {
     if(a!=b) {
-        int temp = sol.tabPositionsSolutionsCourante[a];
-        sol.tabPositionsSolutionsCourante[a] = sol.tabPositionsSolutionsCourante[b];
-        sol.tabPositionsSolutionsCourante[b] = temp;
+        int temp = sol.positionsCourante[a];
+        sol.positionsCourante[a] = sol.positionsCourante[b];
+        sol.positionsCourante[b] = temp;
     }
 }
 
 void verifierNombreDeClientsCouvertsParStation(struct Solution &sol) {
-    
-    
-  
-    for(int i = 0; i < sol.tabPositionsSolutionsCourante.taille(); i++) {
-        if(!sol.lesStations[(sol.pasAssezImm?sol.tabPositionsSolutionsCourante[i]:i)].peutEtreInstalleeSur
-            (sol.lesPlusHautImmeubles[(sol.pasAssezImm?i:sol.tabPositionsSolutionsCourante[i])])) {
+
+
+
+    for(int i = 0; i < sol.positionsCourante.taille(); i++) {
+        if(!sol.lesStations[(sol.pasAssezImm?sol.positionsCourante[i]:i)].peutEtreInstalleeSur
+            (sol.lesPlusHautImmeubles[(sol.pasAssezImm?i:sol.positionsCourante[i])])) {
             return;
         }
     }
 
     int total = 0;
     for(int i = 0; i < sol.lesImmeubles.taille(); i++) {
-        for(int j = 0; j < sol.tabPositionsSolutionsCourante.taille(); j++) {
+        for(int j = 0; j < sol.positionsCourante.taille(); j++) {
             if(immeubleCouvertParUneStationDansSolution(sol, i, j)) {
-                total = sol.lesImmeubles[i].ajouterClient(total);
+                total = sol.lesImmeubles[i].ajouterDesClients(total);
                 break;
             }
         }
@@ -187,12 +199,13 @@ void verifierNombreDeClientsCouvertsParStation(struct Solution &sol) {
 
     if(total > sol.nbMaxClientPourSolution) {
         sol.nbMaxClientPourSolution = total;
-        sol.tabPositionsOptimale = sol.tabPositionsSolutionsCourante;
+        sol.positionsOptimale = sol.positionsCourante;
+
     }
 }
 
 void produirePermutations(struct Solution &sol, int debut, int fin) {
-    
+
     if(sol.nbMaxClientPourImmeubles == sol.nbMaxClientPourSolution)
         return;     //On couvre tous les clients: deja optimale.
     if(debut == fin) {
@@ -207,14 +220,14 @@ void produirePermutations(struct Solution &sol, int debut, int fin) {
 }
 
 void afficherResultat(struct Solution& sol) {
-    for(int i = 0; i < sol.solution.taille(); i++) {
-        cout << sol.lesStations[(sol.pasAssezImm?sol.tabPositionsOptimale[i]:i)];
-        cout << " " << sol.lesPlusHautImmeubles[(sol.pasAssezImm?i:sol.tabPositionsOptimale[i])] << endl;
+    for(int i = 0; i < sol.positionsOptimale.taille(); i++) {
+        cout << sol.lesStations[(sol.pasAssezImm?sol.positionsOptimale[i]:i)];
+        cout << " " << sol.lesPlusHautImmeubles[(sol.pasAssezImm?i:sol.positionsOptimale[i])] << endl;
     }
     cout << sol.nbMaxClientPourSolution << endl;
 }
 
 bool immeubleCouvertParUneStationDansSolution(struct Solution& sol, int i, int j) {
-    return sol.lesStations[(sol.pasAssezImm?sol.tabPositionsSolutionsCourante[j]:j)].estCompriseEntre
-        (sol.lesImmeubles[i], sol.lesPlusHautImmeubles[(sol.pasAssezImm?j:sol.tabPositionsSolutionsCourante[j])]);
-} 
+    return sol.lesStations[(sol.pasAssezImm?sol.positionsCourante[j]:j)].estCompriseEntre
+        (sol.lesImmeubles[i], sol.lesPlusHautImmeubles[(sol.pasAssezImm?j:sol.positionsCourante[j])]);
+}
