@@ -8,7 +8,7 @@ int add(int x,int y,int z){
 }
 int main()
 {
-	cout<<"Somme: "<<add(1,2,3)==6;
+	cout<<"Somme: "<<add(1,2,3);
 	return 0;
 }
 
