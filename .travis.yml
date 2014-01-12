@@ -1,4 +1,3 @@
-language: C++
 before_script:  
   - chmod +x build.sh
 script: ./build.sh
