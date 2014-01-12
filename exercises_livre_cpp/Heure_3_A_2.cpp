@@ -10,9 +10,9 @@ int main()
  // result of multiplying width by length
  unsigned short area = width * length * height;
 
- std::cout << “Width: “ << width << “\n”;
- std::cout << “Length: “ << length << “\n”;
- std::cout << “height: “ << height << “\n”;
- std::cout << “Area: “ << area << “\n”;
+ std::cout << "Width: " << width << "\n";
+ std::cout << "Length: " << length << "\n";
+ std::cout << "height: " << height << "\n";
+ std::cout << "Area:" << area << "\n";
  return 0;
 }
