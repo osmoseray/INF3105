@@ -2,8 +2,8 @@
 using namespace std;
 int main(int argc, char const *argv[])
 {
-	char name[35]=argv[1];
+	
 	cout<<"Enter name: ";
-	cout<<endl<<"hello"<<name;
+	cout<<endl<<"hello"<<argv[1];
 	return 0;
 }
