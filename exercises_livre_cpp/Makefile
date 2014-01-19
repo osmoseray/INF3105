@@ -10,15 +10,17 @@ execute:applyRights
 	./Heure_3_A_2
 	./Heure_6_A_1
 	./Heure_7_A_1 mike
+	./Heure_8_A_1
 
 applyRights:compile
 	${CHMOD} Heure_1_A_1
 	${CHMOD} Heure_2_A_2
 	${CHMOD} Heure_3_A_2
 	${CHMOD} Heure_6_A_1
-	${CHMOD} Heure_7_A_1 
+	${CHMOD} Heure_7_A_1
+	${CHMOD} Heure_8_A_1 
 
-compile:Heure_1_A_1 Heure_2_A_2 Heure_3_A_2 Heure_6_A_1 Heure_7_A_1
+compile:Heure_1_A_1 Heure_2_A_2 Heure_3_A_2 Heure_6_A_1 Heure_7_A_1 Heure_8_A_1
 
 Heure_1_A_1:Heure_1_A_1.h Heure_1_A_1.cpp
 	${COMPILER} ${OPTIONS} Heure_1_A_1.cpp -o Heure_1_A_1
@@ -37,6 +39,9 @@ Heure_6_A_1:Heure_6_A_1.cpp
 
 Heure_7_A_1:Heure_7_A_1.cpp
 	${COMPILER} ${OPTIONS} Heure_7_A_1.cpp -o Heure_7_A_1
+
+Heure_8_A_1: Heure_8_A_1.h Heure_8_A_1.cpp
+	${COMPILER} ${OPTIONS} Heure_8_A_1.cpp -o Heure_7_A_1
 
 
 	
