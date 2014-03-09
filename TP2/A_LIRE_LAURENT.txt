@@ -1,0 +1,18 @@
+
+
+Pour l'arbre avl voici ce qui est implémenté.
+
+vider = fonctionne parfaitement;
+copier = fonctionne parfaitement;
+contient = fonctionne parfaitement
+hauteur = pas implémenté du tout
+max = une erreur quand l'arbre est vide je sais pas quois retourné. mais pour le reste c'est ok.
+debut = fonctionne parfaitement
+rechercher = fonctionne parfaitement quoi que si il trouve pas je suis pas sur qu'il va retourner null dans le futur.
+rechercherEgalOusuivant = si ya pas de suivant sa plante et je retourne quois ??
+rechercherEgalOuPrecedent = Si ya pas de précédent sa plante et je retourne quois ??
+Opérateur ++ = Fonctionne parfaitement 
+
+Je vais continuer demain pour faire l'arbreMap ta pas besoin de plus Laurent.
+
+
