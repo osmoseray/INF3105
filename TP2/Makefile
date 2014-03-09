@@ -13,7 +13,7 @@ all : tp2 testdate
 tp2: tp2.o historique.o date.o
 	g++ $(OPTIONS) -o tp2 date.o historique.o tp2.o
 
-tp2.o: tp2.cpp
+tp2.o: tp2.cpp arbreavl.h
 	g++ $(OPTIONS) -c -o tp2.o tp2.cpp
 
 date.o: date.h date.cpp

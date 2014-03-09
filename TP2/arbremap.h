@@ -3,7 +3,6 @@
   Squelette pour Lab8 + TP2
 */
 
-
 #if !defined(__ARBRE_MAP_H__)
 #define __ARBRE_MAP_H__
 
@@ -28,8 +27,6 @@ class ArbreMap
     const V& operator[] (const K&) const;
     V& operator[] (const K&);
 };
-
-
 
 template <class K, class V>
 void ArbreMap<K,V>::vider(){
@@ -63,7 +60,7 @@ const V& ArbreMap<K,V>::operator[] (const K& c)  const
 }
 
 template <class K, class V>
-V& ArbreMap<K,V>::operator[] (const K& c) 
+V& ArbreMap<K,V>::operator[] (const K& c)
 {
     // À compléter
 }
