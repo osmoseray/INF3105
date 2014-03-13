@@ -147,6 +147,7 @@ bool ArbreAVL<T>::inserer(const T& element, Noeud*& noeud)
                 rotationDroiteGauche(noeud->gauche);
                 rotationGaucheDroite(noeud);
         }
+
         return false;
     }
 
@@ -161,6 +162,7 @@ bool ArbreAVL<T>::inserer(const T& element, Noeud*& noeud)
                 rotationGaucheDroite(noeud->droite);
                 rotationDroiteGauche(noeud);
         }
+
         return false;
     }
 
@@ -214,21 +216,6 @@ bool ArbreAVL<T>::vide() const
     if(racine == NULL) {
         return true;
     }
-
-    cout << "la racine = " << racine->contenu << endl;
-
-    if(racine->gauche == NULL) {
-            cout << "l'enfant gauche est null" << endl;
-    } else {
-                    cout << "l'enfant gauche a des données" << endl;
-    }
-
-     if(racine->droite == NULL) {
-            cout << "l'enfant droite est null" << endl;
-    }else {
-                    cout << "l'enfant droite a des données" << endl;
-    }
-
 
     return false;
 
@@ -293,14 +280,37 @@ bool ArbreAVL<T>::contient(const T& element) const
 }
 
 template <class T>
-int  ArbreAVL<T>::hauteur() const{
-    // À compléter.
-    return 0;
+int ArbreAVL<T>::hauteur() const{
+
+    int compteur = 0;
+    Iterateur iter(*this);
+    iter.courant = this->racine;
+
+    while(iter) {
+        if(iter.courant->equilibre >= 0) {
+            iter.courant = iter.courant->gauche;
+            compteur += 1;
+            continue;
+        }
+
+        if(iter.courant->equilibre < 0) {
+            iter.courant = iter.courant->droite;
+            compteur += 1;
+            continue;
+        }
+    }
+
+    return compteur;
+
 }
 
 template <class T>
 const T& ArbreAVL<T>::max(Noeud* n) const
 {
+
+    if(n == NULL) {
+        return n->contenu;
+    }
 
     while(n->droite != NULL) {
             n = n->droite;
@@ -376,7 +386,7 @@ typename ArbreAVL<T>::Iterateur ArbreAVL<T>::rechercherEgalOuSuivant(const T& e)
     Iterateur iter(*this);
     iter = rechercher(e);
 
-    if(iter == NULL) {
+    if(iter.courant == NULL) {
         return iter;
     }
 
@@ -394,7 +404,7 @@ typename ArbreAVL<T>::Iterateur ArbreAVL<T>::rechercherEgalOuPrecedent(const T& 
     Iterateur iter(*this);
     iter = rechercher(e);
 
-    if(iter == NULL) {
+    if(iter.courant == NULL) {
         return iter;
     }
 

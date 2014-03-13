@@ -60,7 +60,10 @@ void tp2(std::istream& entree){
 int main(int argc, const char** args) {
 
     ArbreAVL<int> arbre;
-    ArbreAVL<int> arbre2;
+
+    cout << "vide = " << arbre.rechercher(25) << endl;
+        cout << "vide2 = " << arbre.rechercherEgalOuPrecedent(25) << endl;
+            cout << "vide3 = " << arbre.rechercherEgalOuSuivant(25) << endl;
 
     arbre.inserer(29);
     arbre.inserer(7);
@@ -79,56 +82,7 @@ int main(int argc, const char** args) {
     arbre.inserer(86);
     arbre.inserer(75);
 
-    arbre2 = arbre;
-
-    cout << "trouver 1 " << arbre2.contient(1) << endl;
-    cout << "trouver 29 " << arbre2.contient(29) << endl;
-    cout << "trouver 7 " << arbre2.contient(7) << endl;
-    cout << "trouver 4 " << arbre2.contient(4) << endl;
-    cout << "trouver 2 " << arbre2.contient(2) << endl;
-    cout << "trouver 18 " << arbre2.contient(18) << endl;
-    cout << "trouver 11 " << arbre2.contient(11) << endl;
-    cout << "trouver 20 " << arbre2.contient(20) << endl;
-    cout << "trouver 15 " << arbre2.contient(15) << endl;
-    cout << "trouver 69 " << arbre2.contient(69) << endl;
-    cout << "trouver 46 " << arbre2.contient(46) << endl;
-    cout << "trouver 37 " << arbre2.contient(37) << endl;
-    cout << "trouver 53 " << arbre2.contient(53) << endl;
-    cout << "trouver 80 " << arbre2.contient(80) << endl;
-    cout << "trouver 74 " << arbre2.contient(74) << endl;
-    cout << "trouver 86 " << arbre2.contient(86) << endl;
-    cout << "trouver 75 " << arbre2.contient(75) << endl;
-    cout << "trouver 90 " << arbre2.contient(90) << endl;
-
-    /*arbre.vider();*/
-
-    /*cout << "trouver 1 " << arbre.contient(1) << endl;
-    cout << "trouver 29 " << arbre.contient(29) << endl;
-    cout << "trouver 7 " << arbre.contient(7) << endl;
-    cout << "trouver 4 " << arbre.contient(4) << endl;
-    cout << "trouver 2 " << arbre.contient(2) << endl;
-    cout << "trouver 18 " << arbre.contient(18) << endl;
-    cout << "trouver 11 " << arbre.contient(11) << endl;
-    cout << "trouver 20 " << arbre.contient(20) << endl;
-    cout << "trouver 15 " << arbre.contient(15) << endl;
-    cout << "trouver 69 " << arbre.contient(69) << endl;
-    cout << "trouver 46 " << arbre.contient(46) << endl;
-    cout << "trouver 37 " << arbre.contient(37) << endl;
-    cout << "trouver 53 " << arbre.contient(53) << endl;
-    cout << "trouver 80 " << arbre.contient(80) << endl;
-    cout << "trouver 74 " << arbre.contient(74) << endl;
-    cout << "trouver 86 " << arbre.contient(86) << endl;
-    cout << "trouver 75 " << arbre.contient(75) << endl;
-    cout << "trouver 90 " << arbre.contient(90) << endl;*/
-
-
-    //arbre.rechercherEgalOuPrecedent(90);
-    //arbre.rechercherEgalOuSuivant(90);
-
-
-    //cout << "trouver 8 ? " << arbre.contient(8) << endl;
-    //cout << "trouver 7 ? " << arbre.contient(7) << endl;
-    //cout << "trouver 0 ? " << arbre.contient(0) << endl;
+    cout << "Hauteur de l'arbre = " << arbre.hauteur() << endl;
 
    /* if(argc>1){
          std::ifstream entree(args[1]);
